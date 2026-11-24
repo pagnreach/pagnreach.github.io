@@ -44,6 +44,9 @@ async function encryptHtml(plainHtml, pin, options = {}) {
     iterations: 100000
   };
 
+  const pinLength = pin.length;
+  const dotsHtml = Array.from({ length: pinLength }, () => '<div class="pin-dot"></div>').join('');
+
   const template = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -198,10 +201,7 @@ async function encryptHtml(plainHtml, pin, options = {}) {
     <div class="subtitle">${subtitle}</div>
 
     <div class="pin-dots" id="dotsContainer">
-      <div class="pin-dot"></div>
-      <div class="pin-dot"></div>
-      <div class="pin-dot"></div>
-      <div class="pin-dot"></div>
+      ${dotsHtml}
     </div>
 
     <div class="keypad">
@@ -228,7 +228,7 @@ async function encryptHtml(plainHtml, pin, options = {}) {
     const PAYLOAD = ${JSON.stringify(payload)};
     const STORAGE_KEY = 'vault_session_' + location.pathname;
     let currentPin = '';
-    const MAX_PIN = 4;
+    const MAX_PIN = ${pin.length};
     let isDecrypting = false;
 
     function updateDots() {
