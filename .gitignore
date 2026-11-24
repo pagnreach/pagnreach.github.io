@@ -2,3 +2,5 @@
 *-source.html
 *.secret.html
 generate-*.js
+hub-data.json
+.trash/

@@ -318,14 +318,6 @@ async function encryptHtml(plainHtml, pin, options = {}) {
           document.open();
           document.write(html);
           document.close();
-
-          // Ensure inline scripts are executed
-          Array.from(document.querySelectorAll("script")).forEach(oldScript => {
-            const newScript = document.createElement("script");
-            Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
-            newScript.appendChild(document.createTextNode(oldScript.innerHTML));
-            oldScript.parentNode.replaceChild(newScript, oldScript);
-          });
         }, isAuto ? 0 : 250);
 
       } catch (err) {
