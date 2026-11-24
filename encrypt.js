@@ -2,7 +2,10 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto').webcrypto;
 
-async function encryptHtml(plainHtml, pin, title = 'Protected Page') {
+async function encryptHtml(plainHtml, pin, options = {}) {
+  const title = typeof options === 'string' ? options : (options.title || 'Protected Page');
+  const subtitle = options.subtitle || 'Enter Passcode to View';
+
   const enc = new TextEncoder();
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const iv = crypto.getRandomValues(new Uint8Array(12));
@@ -191,8 +194,8 @@ async function encryptHtml(plainHtml, pin, title = 'Protected Page') {
 
   <div class="lock-container" id="lockBox">
     <div class="lock-icon" id="lockIcon">🔒</div>
-    <div class="title">Enter Passcode</div>
-    <div class="subtitle">End-to-End Encrypted Note</div>
+    <div class="title">${title}</div>
+    <div class="subtitle">${subtitle}</div>
 
     <div class="pin-dots" id="dotsContainer">
       <div class="pin-dot"></div>
@@ -223,6 +226,7 @@ async function encryptHtml(plainHtml, pin, title = 'Protected Page') {
 
   <script>
     const PAYLOAD = ${JSON.stringify(payload)};
+    const STORAGE_KEY = 'vault_session_' + location.pathname;
     let currentPin = '';
     const MAX_PIN = 4;
     let isDecrypting = false;
@@ -246,7 +250,6 @@ async function encryptHtml(plainHtml, pin, title = 'Protected Page') {
 
       if (currentPin.length === MAX_PIN) {
         isDecrypting = true;
-        // Small delay for UI smoothness
         setTimeout(attemptDecrypt, 150);
       }
     }
@@ -258,7 +261,6 @@ async function encryptHtml(plainHtml, pin, title = 'Protected Page') {
       document.getElementById('errorMsg').classList.remove('visible');
     }
 
-    // Keyboard support
     window.addEventListener('keydown', (e) => {
       if (e.key >= '0' && e.key <= '9') {
         pressKey(e.key);
@@ -267,7 +269,7 @@ async function encryptHtml(plainHtml, pin, title = 'Protected Page') {
       }
     });
 
-    async function attemptDecrypt() {
+    async function attemptDecrypt(isAuto = false) {
       try {
         const enc = new TextEncoder();
         const salt = Uint8Array.from(atob(PAYLOAD.salt), c => c.charCodeAt(0));
@@ -303,19 +305,41 @@ async function encryptHtml(plainHtml, pin, title = 'Protected Page') {
 
         const html = new TextDecoder().decode(decryptedBuffer);
 
-        // Success animation
-        document.getElementById('lockIcon').textContent = '🔓';
+        // Store session PIN for automatic re-entry on refresh
+        try {
+          sessionStorage.setItem(STORAGE_KEY, currentPin);
+        } catch (e) {}
+
+        if (!isAuto) {
+          document.getElementById('lockIcon').textContent = '🔓';
+        }
+
         setTimeout(() => {
           document.open();
           document.write(html);
           document.close();
-        }, 300);
+
+          // Ensure inline scripts are executed
+          Array.from(document.querySelectorAll("script")).forEach(oldScript => {
+            const newScript = document.createElement("script");
+            Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+            newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+            oldScript.parentNode.replaceChild(newScript, oldScript);
+          });
+        }, isAuto ? 0 : 250);
 
       } catch (err) {
-        // Wrong PIN: trigger shake animation
+        if (isAuto) {
+          sessionStorage.removeItem(STORAGE_KEY);
+          currentPin = '';
+          updateDots();
+          isDecrypting = false;
+          return;
+        }
+
         const lockBox = document.getElementById('lockBox');
         lockBox.classList.remove('shake');
-        void lockBox.offsetWidth; // trigger reflow
+        void lockBox.offsetWidth;
         lockBox.classList.add('shake');
         
         document.getElementById('errorMsg').classList.add('visible');
@@ -324,6 +348,18 @@ async function encryptHtml(plainHtml, pin, title = 'Protected Page') {
         isDecrypting = false;
       }
     }
+
+    // Check if session PIN is already stored
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        const savedPin = sessionStorage.getItem(STORAGE_KEY);
+        if (savedPin && savedPin.length === MAX_PIN) {
+          currentPin = savedPin;
+          isDecrypting = true;
+          attemptDecrypt(true);
+        }
+      } catch (e) {}
+    });
   </script>
 </body>
 </html>`;
@@ -331,16 +367,16 @@ async function encryptHtml(plainHtml, pin, title = 'Protected Page') {
   return template;
 }
 
-// Support CLI execution: node encrypt.js <inputFile> <pin> <outputFile>
+// Support CLI execution: node encrypt.js <inputFile> <pin> <outputFile> [title] [subtitle]
 if (require.main === module) {
   const args = process.argv.slice(2);
   if (args.length < 3) {
-    console.log("Usage: node encrypt.js <source.html> <pin> <dest.html> [title]");
+    console.log("Usage: node encrypt.js <source.html> <pin> <dest.html> [title] [subtitle]");
     process.exit(1);
   }
-  const [src, pin, dest, title] = args;
+  const [src, pin, dest, title, subtitle] = args;
   const rawHtml = fs.readFileSync(src, 'utf8');
-  encryptHtml(rawHtml, pin, title || 'Protected Page').then(encryptedHtml => {
+  encryptHtml(rawHtml, pin, { title: title || 'Protected Page', subtitle: subtitle || 'Enter Passcode to View' }).then(encryptedHtml => {
     fs.mkdirSync(path.dirname(dest), { recursive: true });
     fs.writeFileSync(dest, encryptedHtml, 'utf8');
     console.log(`Successfully generated encrypted page at: ${dest}`);
