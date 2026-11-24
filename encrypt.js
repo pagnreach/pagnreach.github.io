@@ -5,6 +5,7 @@ const crypto = require('crypto').webcrypto;
 async function encryptHtml(plainHtml, pin, options = {}) {
   const title = typeof options === 'string' ? options : (options.title || 'Protected Page');
   const subtitle = options.subtitle || 'Enter Passcode to View';
+  const buildTs = (typeof options === 'object' && options.buildTs) ? options.buildTs : Date.now();
 
   const enc = new TextEncoder();
   const salt = crypto.getRandomValues(new Uint8Array(16));
@@ -225,11 +226,41 @@ async function encryptHtml(plainHtml, pin, options = {}) {
   <div class="footer-note">AES-256-GCM Zero-Knowledge Encryption</div>
 
   <script>
-    const PAYLOAD = ${JSON.stringify(payload)};
-    const STORAGE_KEY = 'vault_session_' + location.pathname;
+    let PAGE_BUILD_TS = ${buildTs};
+    let PAYLOAD = ${JSON.stringify(payload)};
+    const NORM_PATH = location.pathname.endsWith('/') ? location.pathname : (location.pathname + '/');
+    const STORAGE_KEY = 'vault_session_' + NORM_PATH;
+    const FRESH_PAYLOAD_KEY = 'pr_fresh_payload_' + NORM_PATH;
     let currentPin = '';
-    const MAX_PIN = ${pin.length};
+    let MAX_PIN = ${pin.length};
     let isDecrypting = false;
+    let isUnlocked = false;
+
+    function applyFreshPayload(newPayload, newPinLen, newTs) {
+      if (!newPayload || !newPayload.ciphertext) return;
+      PAYLOAD = newPayload;
+      MAX_PIN = Number(newPinLen) || MAX_PIN;
+      if (newTs) PAGE_BUILD_TS = newTs;
+      currentPin = '';
+      const container = document.getElementById('dotsContainer');
+      if (container) {
+        container.innerHTML = Array.from({ length: MAX_PIN }, () => '<div class="pin-dot"></div>').join('');
+      }
+      try { sessionStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    }
+
+    // 1. Instant 0ms sync if PIN was just changed from Reach's Hub in this browser
+    try {
+      const rawFresh = localStorage.getItem(FRESH_PAYLOAD_KEY);
+      if (rawFresh) {
+        const parsed = JSON.parse(rawFresh);
+        if (parsed && parsed.updatedAt > PAGE_BUILD_TS && parsed.payload) {
+          applyFreshPayload(parsed.payload, parsed.pinLength, parsed.updatedAt);
+        } else if (parsed && PAGE_BUILD_TS >= parsed.updatedAt) {
+          localStorage.removeItem(FRESH_PAYLOAD_KEY);
+        }
+      }
+    } catch (e) {}
 
     function updateDots() {
       const dots = document.querySelectorAll('.pin-dot');
@@ -304,6 +335,7 @@ async function encryptHtml(plainHtml, pin, options = {}) {
         );
 
         const html = new TextDecoder().decode(decryptedBuffer);
+        isUnlocked = true;
 
         // Store session PIN for automatic re-entry on refresh
         try {
@@ -341,7 +373,7 @@ async function encryptHtml(plainHtml, pin, options = {}) {
       }
     }
 
-    // Check if session PIN is already stored
+    // Check if session PIN is already stored, and revalidate bypassing browser HTTP cache
     window.addEventListener('DOMContentLoaded', () => {
       try {
         const savedPin = sessionStorage.getItem(STORAGE_KEY);
@@ -351,11 +383,31 @@ async function encryptHtml(plainHtml, pin, options = {}) {
           attemptDecrypt(true);
         }
       } catch (e) {}
+
+      // 2. Cross-device cache-busting check against GitHub Pages max-age=600 cache
+      fetch(location.pathname + '?_cb=' + Date.now(), { cache: 'no-store' })
+        .then(r => r.ok ? r.text() : '')
+        .then(txt => {
+          if (!txt || isUnlocked || isDecrypting) return;
+          const tsMatch = txt.match(/let\s+PAGE_BUILD_TS\s*=\s*(\d+);/);
+          const plMatch = txt.match(/let\s+PAYLOAD\s*=\s*(\{[^\n;]+\});/);
+          const mpMatch = txt.match(/let\s+MAX_PIN\s*=\s*(\d+);/);
+          if (tsMatch && plMatch && mpMatch) {
+            const remoteTs = Number(tsMatch[1]);
+            if (remoteTs > PAGE_BUILD_TS) {
+              applyFreshPayload(JSON.parse(plMatch[1]), Number(mpMatch[1]), remoteTs);
+            }
+          }
+        })
+        .catch(() => {});
     });
   </script>
 </body>
 </html>`;
 
+  if (typeof options === 'object' && options.returnObject) {
+    return { html: template, payload, pinLength: pin.length, buildTs };
+  }
   return template;
 }
 
