@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🇯🇵 Japan Journey 2026 | Reach & Muypor</title>
+  <style>
+    :root {
+      --primary: #d9383a;
+      --primary-light: #fdf2f2;
+      --bg: #f8f9fa;
+      --card-bg: #ffffff;
+      --text-main: #1d1d1f;
+      --text-muted: #6e6e73;
+      --border: #e5e5ea;
+      --accent-osaka: #ff9500;
+      --accent-kyoto: #34c759;
+      --accent-tokyo: #0071e3;
+      --accent-purple: #af52de;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding-bottom: 80px;
+    }
+
+    /* Top Sticky Navigation Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+    }
+
+    .header-content {
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-title h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .header-title p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Filter Pills */
+    .filter-bar {
+      max-width: 720px;
+      margin: 12px auto 0;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+
+    .pill-btn {
+      flex-shrink: 0;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .pill-btn.active {
+      background: var(--text-main);
+      color: #fff;
+      border-color: var(--text-main);
+    }
+
+    /* Main Container */
+    main {
+      max-width: 720px;
+      margin: 20px auto;
+      padding: 0 16px;
+    }
+
+    /* Hero Banner */
+    .hero-card {
+      background: linear-gradient(135deg, #1d1d1f 0%, #3a3a3c 100%);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::after {
+      content: "🇯🇵";
+      position: absolute;
+      right: 15px;
+      bottom: 10px;
+      font-size: 5rem;
+      opacity: 0.15;
+    }
+
+    .hero-card h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-card p {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 16px;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 12px;
+      border-radius: 12px;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+    .stat-val {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .stat-lbl {
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Confirmed Fast Pass Card */
+    .tickets-strip {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .ticket-badge {
+      background: var(--card-bg);
+      border-radius: 14px;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .t-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    .t-icon.usj { background: #fff2e5; }
+    .t-icon.disney { background: #e5f1ff; }
+    .t-icon.train { background: #e8f9ed; }
+
+    .t-info h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .t-info p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .t-pill {
+      margin-left: auto;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: #e5e5ea;
+      color: #3a3a3c;
+      flex-shrink: 0;
+    }
+    .t-pill.booked { background: #e8f9ed; color: #1e7e34; }
+
+    /* Day Card */
+    .day-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s ease;
+    }
+
+    .day-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+
+    .day-date {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .day-number {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .day-weekday {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .city-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .city-tag.osaka { background: #fff4e5; color: var(--accent-osaka); }
+    .city-tag.kyoto { background: #ebfaef; color: var(--accent-kyoto); }
+    .city-tag.tokyo { background: #e5f1ff; color: var(--accent-tokyo); }
+
+    /* Hotel Box */
+    .hotel-card {
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .hotel-card .h-icon { font-size: 1.2rem; }
+    .hotel-title { font-weight: 700; color: #1d1d1f; }
+    .hotel-addr { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+    .hotel-tel { font-size: 0.75rem; color: #0071e3; margin-top: 2px; text-decoration: none; display: inline-block; }
+
+    /* Timeline Items */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .time-slot {
+      width: 60px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+
+    .time-slot.highlight {
+      color: var(--primary);
+    }
+
+    .event-content {
+      flex: 1;
+      background: #ffffff;
+    }
+
+    .event-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .event-desc {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+    }
+
+    /* Highlight box for booked rides */
+    .express-box {
+      background: #fff8f0;
+      border: 1px solid #ffd8a8;
+      border-radius: 12px;
+      padding: 14px;
+      margin: 14px 0;
+    }
+
+    .express-box h5 {
+      color: #d9480f;
+      font-size: 0.85rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .express-ride {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      padding: 6px 0;
+      border-bottom: 1px dashed rgba(217, 72, 15, 0.2);
+    }
+    .express-ride:last-child { border-bottom: none; }
+    .ride-time { font-weight: 800; color: #d9480f; }
+
+    /* Tips & Alerts in Cards */
+    .pro-tip {
+      background: #edf6ff;
+      border-left: 3px solid var(--accent-tokyo);
+      padding: 10px 12px;
+      border-radius: 0 10px 10px 0;
+      margin-top: 14px;
+      font-size: 0.82rem;
+      color: #0b5394;
+    }
+    .pro-tip strong { color: #004085; }
+
+    /* Pro Hacks Section */
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin: 32px 0 16px;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hacks-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .hack-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 16px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hack-card h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hack-card p {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    /* Interactive Checklist */
+    .checklist-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 20px;
+      border: 1px solid var(--border);
+      margin-top: 16px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f1f1f4;
+      font-size: 0.88rem;
+      cursor: pointer;
+    }
+    .check-item:last-child { border-bottom: none; }
+
+    .check-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+    }
+
+    /* Floating Navigation / Bottom Info */
+    .footer-bar {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Header -->
+  <header>
+    <div class="header-content">
+      <div class="header-title">
+        <h1>🇯🇵 Japan Journey 2026</h1>
+        <p>Reach & Muypor • Nov 28 – Dec 8</p>
+      </div>
+      <span class="city-tag osaka" id="current-badge">11 Days</span>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="filter-bar">
+      <button class="pill-btn active" onclick="filterCity('all', this)">All Days</button>
+      <button class="pill-btn" onclick="filterCity('osaka', this)">Osaka</button>
+      <button class="pill-btn" onclick="filterCity('kyoto', this)">Kyoto</button>
+      <button class="pill-btn" onclick="filterCity('tokyo', this)">Tokyo</button>
+      <button class="pill-btn" onclick="filterCity('hacks', this)">Travel Hacks</button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Hero Overview Banner -->
+    <div class="hero-card">
+      <h2>Honeymoon & Winter Itinerary</h2>
+      <p>Osaka • Kyoto • Tokyo • Theme Parks & Autumn Colors</p>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-val">3 Cities</div>
+          <div class="stat-lbl">Route</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-val">2 Parks</div>
+          <div class="stat-lbl">USJ & Disney</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-val">Nov 28</div>
+          <div class="stat-lbl">Flight Out</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Booked Highlights Strip -->
+    <div class="tickets-strip">
+      <div class="ticket-badge">
+        <div class="t-icon usj">🎢</div>
+        <div class="t-info">
+          <h4>USJ Express Pass 8 (Nov 29)</h4>
+          <p>Donkey Kong Mine Cart, Mario Kart, Minions</p>
+        </div>
+        <div class="t-pill booked">Confirmed</div>
+      </div>
+
+      <div class="ticket-badge">
+        <div class="t-icon train">🚂</div>
+        <div class="t-info">
+          <h4>Sagano Romantic Train (Dec 3)</h4>
+          <p>Arashiyama scenic river canyon & autumn foliage</p>
+        </div>
+        <div class="t-pill booked">Confirmed</div>
+      </div>
+
+      <div class="ticket-badge">
+        <div class="t-icon disney">🏰</div>
+        <div class="t-info">
+          <h4>Tokyo DisneySea (Dec 7)</h4>
+          <p>Monday entry • Fantasy Springs priority rope drop</p>
+        </div>
+        <div class="t-pill booked">Confirmed</div>
+      </div>
+    </div>
+
+    <!-- ==================== DAY BY DAY ITINERARY ==================== -->
+
+    <!-- DAY 1: OSAKA ARRIVAL -->
+    <div class="day-card" data-city="osaka">
+      <div class="day-header">
+        <div class="day-date">
+          <span class="day-number">Nov 28</span>
+          <span class="day-weekday">Saturday</span>
+        </div>
+        <span class="city-tag osaka">Osaka Arrival</span>
+      </div>
+
+      <div class="hotel-card">
+        <div class="h-icon">🏨</div>
+        <div>
+          <div class="hotel-title">Hotel Keihan Tenmabashi Ekimae (2 Nights)</div>
+          <div class="hotel-addr">2-13 Kyomachi, Tenmabashi, Chuo-ku, Osaka (Right at Exit 14!)</div>
+          <a class="hotel-tel" href="tel:+81669460321">📞 +81-6-69460321</a>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="time-slot">00:15</span>
+          <div class="event-content">
+            <div class="event-title">Flight KE690: PNH ➔ ICN (Seoul)</div>
+            <div class="event-desc">Depart Phnom Penh midnight. Arrive Incheon 07:40 AM. Transfer to Terminal 2.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">08:50</span>
+          <div class="event-content">
+            <div class="event-title">Flight KE704: ICN ➔ KIX (Osaka)</div>
+            <div class="event-desc">Arrive Kansai International Airport (KIX T1) at 10:45 AM.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">11:30</span>
+          <div class="event-content">
+            <div class="event-title">Airport Train to Hotel</div>
+            <div class="event-desc">Take <strong>Nankai Rapi:t / Airport Express</strong> from KIX to Namba Station (~35 mins). Transfer to Subway to <strong>Tenmabashi Station</strong>. Walk straight out of Exit 14 directly into the hotel!</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">15:00</span>
+          <div class="event-content">
+            <div class="event-title">Hotel Check-In & Rest</div>
+            <div class="event-desc">Unpack, shower, and rest after the overnight flight.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">18:00</span>
+          <div class="event-content">
+            <div class="event-title">Shinsaibashi-suji & Dotonbori</div>
+            <div class="event-desc">Walk the neon food street, photograph the Glico Running Man, enjoy piping hot Takoyaki (Kukuru), Okonomiyaki, and A5 Wagyu skewers.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 2: USJ -->
+    <div class="day-card" data-city="osaka">
+      <div class="day-header">
+        <div class="day-date">
+          <span class="day-number">Nov 29</span>
+          <span class="day-weekday">Sunday</span>
+        </div>
+        <span class="city-tag osaka">Universal Studios</span>
+      </div>
+
+      <div class="hotel-card">
+        <div class="h-icon">🏨</div>
+        <div>
+          <div class="hotel-title">Hotel Keihan Tenmabashi Ekimae</div>
+          <div class="hotel-addr">Station outside hotel ➔ Osaka Loop Line ➔ JR Universal City</div>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="time-slot">09:15</span>
+          <div class="event-content">
+            <div class="event-title">Arrive at USJ Gate</div>
+            <div class="event-desc">Because you have Express Pass 8, you <strong>do not</strong> need to wait in the 6:30 AM queue. Arrive at 9:15 AM comfortably.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Express Pass Timetable Box -->
+      <div class="express-box">
+        <h5>⚡ Your Confirmed Express Pass 8 Schedule</h5>
+        <div class="express-ride">
+          <span>Villain-Con Minion Blast</span>
+          <span class="ride-time">11:00 – 11:30</span>
+        </div>
+        <div class="express-ride">
+          <span>🍴 Early Lunch Break (Studio Stars / 3 Broomsticks)</span>
+          <span class="ride-time">11:45 – 12:30</span>
+        </div>
+        <div class="express-ride">
+          <span>Flight of the Hippogriff (Harry Potter)</span>
+          <span class="ride-time">12:50 – 13:20</span>
+        </div>
+        <div class="express-ride">
+          <span>🍄 <strong>SUPER NINTENDO WORLD ENTRY</strong></span>
+          <span class="ride-time">14:00 – 15:00</span>
+        </div>
+        <div class="express-ride">
+          <span>Mario Kart: Koopa's Challenge</span>
+          <span class="ride-time">14:00 – 14:30</span>
+        </div>
+        <div class="express-ride">
+          <span>Yoshi's Adventure</span>
+          <span class="ride-time">14:30 – 15:00</span>
+        </div>
+        <div class="express-ride">
+          <span>🍌 <strong>Mine Cart Madness (Donkey Kong!)</strong></span>
+          <span class="ride-time">15:00 – 15:30</span>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="time-slot">16:00</span>
+          <div class="event-content">
+            <div class="event-title">The Flying Dinosaur & Harry Potter Forbidden Journey</div>
+            <div class="event-desc">Use your remaining Express access in the afternoon/dusk when wait times peak for normal queues.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pro-tip">
+        <strong>Pro-Tip:</strong> Eat your lunch before 12:30 PM. From 12:50 PM to 3:30 PM, your Express passes run back-to-back with zero break!
+      </div>
+    </div>
+
+    <!-- DAY 3: OSAKA TO KYOTO -->
+    <div class="day-card" data-city="kyoto">
+      <div class="day-header">
+        <div class="day-date">
+          <span class="day-number">Nov 30</span>
+          <span class="day-weekday">Monday</span>
+        </div>
+        <span class="city-tag kyoto">Transfer to Kyoto</span>
+      </div>
+
+      <div class="hotel-card">
+        <div class="h-icon">🏨</div>
+        <div>
+          <div class="hotel-title">KIORI Hotel Teramachi (4 Nights)</div>
+          <div class="hotel-addr">504 Kyogoku-cho, Shimogyo Ward, Kyoto City</div>
+          <a class="hotel-tel" href="tel:+81757418094">📞 +81-75-7418094</a>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="time-slot">10:00</span>
+          <div class="event-content">
+            <div class="event-title">Check-Out & Direct Keihan Train</div>
+            <div class="event-desc">Board the <strong>Keihan Main Line right at Tenmabashi Station</strong>. Ride direct to <strong>Gion-Shijo Station</strong> in Kyoto (45 mins, ~¥430). No transfers!</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">12:00</span>
+          <div class="event-content">
+            <div class="event-title">Check-in at KIORI Hotel Teramachi</div>
+            <div class="event-desc">Drop bags at hotel. Stroll down historic Teramachi Shopping Arcade and Shijo-dori.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">17:00</span>
+          <div class="event-content">
+            <div class="event-title">Pontocho Alley & Kamogawa River</div>
+            <div class="event-desc">Evening walk down Kyoto's famous atmospheric lantern-lit alleyway for dinner.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 4: KYOTO HIGHLIGHTS -->
+    <div class="day-card" data-city="kyoto">
+      <div class="day-header">
+        <div class="day-date">
+          <span class="day-number">Dec 1</span>
+          <span class="day-weekday">Tuesday</span>
+        </div>
+        <span class="city-tag kyoto">Kyoto Classic</span>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="time-slot highlight">07:15</span>
+          <div class="event-content">
+            <div class="event-title">Fushimi Inari Taisha (Early Morning)</div>
+            <div class="event-desc">Take Keihan Line direct to Fushimi-Inari. Walk the 10,000 orange Torii gates before the tour bus crowds arrive!</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">10:00</span>
+          <div class="event-content">
+            <div class="event-title">Kiyomizu-dera & Ninenzaka/Sannenzaka</div>
+            <div class="event-desc">Climb to the wooden stage overlooking Kyoto's autumn trees. Walk down the preserved stone slopes with traditional sweet shops and the tatami Starbucks.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">13:30</span>
+          <div class="event-content">
+            <div class="event-title">Nishiki Market Lunch ("Kyoto's Kitchen")</div>
+            <div class="event-desc">Tako tamago (baby octopus), wagyu skewers, matcha ice cream. <em>(Note: Stalls close at 5:00 PM, so midday is ideal!)</em></div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">16:30</span>
+          <div class="event-content">
+            <div class="event-title">Gion (Hanamikoji Street) & Yasaka Shrine</div>
+            <div class="event-desc">Walk through the geisha district as evening lanterns illuminate the wooden machiya houses.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pro-tip">
+        <strong>Kyoto Taxi Rule:</strong> For short hops between Kiyomizu-dera and Gion/Nishiki, hail a taxi or use the GO app. At $6–$8 USD, it saves you from walking up steep hills!
+      </div>
+    </div>
+
+    <!-- DAY 5: UJI & MATCHA -->
+    <div class="day-card" data-city="kyoto">
+      <div class="day-header">
+        <div class="day-date">
+          <span class="day-number">Dec 2</span>
+          <span class="day-weekday">Wednesday</span>
+        </div>
+        <span class="city-tag kyoto">Matcha & Culture</span>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="time-slot">09:30</span>
+          <div class="event-content">
+            <div class="event-title">Keihan Train to Uji (Matcha Capital)</div>
+            <div class="event-desc">30-minute scenic train ride to Uji, the historic epicenter of Japanese green tea.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">10:30</span>
+          <div class="event-content">
+            <div class="event-title">Byodoin Temple (Phoenix Hall)</div>
+            <div class="event-desc">The iconic UNESCO World Heritage temple featured on the Japanese 10-yen coin, surrounded by reflection ponds and maple trees.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">12:30</span>
+          <div class="event-content">
+            <div class="event-title">Nakamura Tokichi & Tea Ceremony</div>
+            <div class="event-desc">Freshly made matcha soba noodles, matcha parfaits, and freshly ground ceremonial tea.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">16:00</span>
+          <div class="event-content">
+            <div class="event-title">Return to Kyoto & Cafe Hopping</div>
+            <div class="event-desc">Relaxed afternoon cafe hopping along the Kamogawa riverbanks.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 6: ARASHIYAMA -->
+    <div class="day-card" data-city="kyoto">
+      <div class="day-header">
+        <div class="day-date">
+          <span class="day-number">Dec 3</span>
+          <span class="day-weekday">Thursday</span>
+        </div>
+        <span class="city-tag kyoto">Arashiyama Scenic</span>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="time-slot">08:30</span>
+          <div class="event-content">
+            <div class="event-title">Arashiyama Bamboo Grove</div>
+            <div class="event-desc">Walk through the towering bamboo forest in the peaceful morning light before crowds gather.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot highlight">10:30</span>
+          <div class="event-content">
+            <div class="event-title">🚂 Sagano Romantic Train (Confirmed Booked!)</div>
+            <div class="event-desc">Retro open-sided train ride along the breathtaking Hozugawa River gorge surrounded by autumn foliage.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">13:00</span>
+          <div class="event-content">
+            <div class="event-title">Arashiyama Yusai-tei Gallery</div>
+            <div class="event-desc">Famous dye artist villa with circular reflection tables mirroring the autumn leaves.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">15:00</span>
+          <div class="event-content">
+            <div class="event-title">Togetsukyo Bridge & % Arabica Coffee</div>
+            <div class="event-desc">Sip specialty coffee overlooking the river and the colorful mountain slopes.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pro-tip">
+        <strong>Luggage Forwarding (Takkyubin):</strong> Ask the KIORI Hotel front desk today to forward your big suitcases to your Ginza hotel via Yamato Transport (~$18/bag). Travel light on the bullet train tomorrow!
+      </div>
+    </div>
+
+    <!-- DAY 7: SHINKANSEN TO TOKYO -->
+    <div class="day-card" data-city="tokyo">
+      <div class="day-header">
+        <div class="day-date">
+          <span class="day-number">Dec 4</span>
+          <span class="day-weekday">Friday</span>
+        </div>
+        <span class="city-tag tokyo">Shinkansen to Tokyo</span>
+      </div>
+
+      <div class="hotel-card">
+        <div class="h-icon">🏨</div>
+        <div>
+          <div class="hotel-title">The Royal Park Canvas Ginza Corridor (4 Nights)</div>
+          <div class="hotel-addr">6-2-11 Ginza, Chuo-ku, Tokyo (In the heart of Ginza nightlife & dining)</div>
+          <a class="hotel-tel" href="tel:+81335731121">📞 +81-3-35731121</a>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="time-slot highlight">10:00</span>
+          <div class="event-content">
+            <div class="event-title">Nozomi Shinkansen (Bullet Train)</div>
+            <div class="event-desc">Kyoto Station ➔ Tokyo Station (2h 15m). Sit on <strong>Seats D & E</strong> on the right-hand side for clear Mount Fuji views!</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">13:00</span>
+          <div class="event-content">
+            <div class="event-title">Check-in at Royal Park Canvas Ginza</div>
+            <div class="event-desc">Hotel is located directly on Ginza Corridor Street, surrounded by world-class restaurants.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">14:30</span>
+          <div class="event-content">
+            <div class="event-title">Kappabashi Street & Asakusa Senso-ji</div>
+            <div class="event-desc">Explore Kappabashi Kitchenware Street (Japanese forged chef knives & handmade ceramics) followed by Senso-ji Temple and Nakamise shopping street.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">19:00</span>
+          <div class="event-content">
+            <div class="event-title">Ginza Corridor Evening Dinner</div>
+            <div class="event-desc">Casual izakayas, craft cocktail bars, and yakitori right outside your hotel doorstep.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 8: TOKYO FASHION & SHIBUYA -->
+    <div class="day-card" data-city="tokyo">
+      <div class="day-header">
+        <div class="day-date">
+          <span class="day-number">Dec 5</span>
+          <span class="day-weekday">Saturday</span>
+        </div>
+        <span class="city-tag tokyo">Shibuya & Harajuku</span>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="time-slot">09:00</span>
+          <div class="event-content">
+            <div class="event-title">Meiji Jingu Shrine</div>
+            <div class="event-desc">Serene morning walk through the towering evergreen cedar forest in the center of Tokyo.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">11:00</span>
+          <div class="event-content">
+            <div class="event-title">Harajuku & Omotesando</div>
+            <div class="event-desc">Explore flagship architectural boutiques, Cat Street sneaker stores, and artisanal coffee roasters.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot highlight">15:30</span>
+          <div class="event-content">
+            <div class="event-title">Shibuya Crossing & Miyashita Park</div>
+            <div class="event-desc">Cross the world's busiest pedestrian scramble, visit Miyashita Park rooftop, and shop at Shibuya Parco.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot highlight">16:30</span>
+          <div class="event-content">
+            <div class="event-title">Shibuya Sky (Sunset Slot)</div>
+            <div class="event-desc">Open-air 360-degree glass rooftop observatory as the sun sets and the Tokyo skyline ignites with neon lights.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 9: ART & SHINJUKU -->
+    <div class="day-card" data-city="tokyo">
+      <div class="day-header">
+        <div class="day-date">
+          <span class="day-number">Dec 6</span>
+          <span class="day-weekday">Sunday</span>
+        </div>
+        <span class="city-tag tokyo">Art & Nightlife</span>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="time-slot">10:30</span>
+          <div class="event-content">
+            <div class="event-title">teamLab Planets TOKYO (Toyosu)</div>
+            <div class="event-desc">Immersive sensory digital art museum (12-minute taxi ride from your Ginza hotel). Walk barefoot through infinite crystal rooms and floating orchid gardens.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">14:00</span>
+          <div class="event-content">
+            <div class="event-title">Ginza Six & Luxury Boutiques</div>
+            <div class="event-desc">Afternoon shopping at Ginza Six rooftop garden, Dover Street Market, and flagship stationery shops (Itoya).</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">18:00</span>
+          <div class="event-content">
+            <div class="event-title">Shinjuku Neon & Omoide Yokocho</div>
+            <div class="event-desc">Experience the iconic Godzilla road in Kabukicho and historic yakitori stalls in Memory Lane.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 10: DISNEYSEA -->
+    <div class="day-card" data-city="tokyo">
+      <div class="day-header">
+        <div class="day-date">
+          <span class="day-number">Dec 7</span>
+          <span class="day-weekday">Monday</span>
+        </div>
+        <span class="city-tag tokyo">Tokyo DisneySea</span>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="time-slot highlight">07:30</span>
+          <div class="event-content">
+            <div class="event-title">Arrival & Rope Drop at Maihama</div>
+            <div class="event-desc">Take train from Ginza/Yurakucho to Maihama Station. Arrive by 7:30 AM to enter right as gates open!</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot highlight">08:15</span>
+          <div class="event-content">
+            <div class="event-title">❄️ Fantasy Springs Strategy (Open App Immediately!)</div>
+            <div class="event-desc">The moment your tickets scan through the gate, open the Tokyo Disney Resort App to grab a <strong>Standby Pass (Free)</strong> or <strong>DPA (Paid)</strong> for Frozen Ever After, Tangled Rapunzel's Lantern Festival, or Peter Pan.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">12:00</span>
+          <div class="event-content">
+            <div class="event-title">Harbor & Volcano Exploration</div>
+            <div class="event-desc">Journey to the Center of the Earth, Tower of Terror, Soaring: Fantastic Flight, and Indiana Jones Adventure.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">19:30</span>
+          <div class="event-content">
+            <div class="event-title">"Believe! Sea of Dreams" Night Spectacular</div>
+            <div class="event-desc">World-famous nighttime projection, laser, and pyrotechnic water show on Mediterranean Harbor.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 11: DEPARTURE -->
+    <div class="day-card" data-city="tokyo">
+      <div class="day-header">
+        <div class="day-date">
+          <span class="day-number">Dec 8</span>
+          <span class="day-weekday">Tuesday</span>
+        </div>
+        <span class="city-tag tokyo">Departure</span>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="time-slot">08:00</span>
+          <div class="event-content">
+            <div class="event-title">Tsukiji Outer Market Breakfast</div>
+            <div class="event-desc">10-minute walk from hotel. Fresh sashimi donburi bowls, Japanese tamagoyaki omelet, and grilled scallops.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot">10:30</span>
+          <div class="event-content">
+            <div class="event-title">Check-Out & Narita Express (N'EX)</div>
+            <div class="event-desc">Board the Narita Express from Tokyo Station (5 mins taxi from Ginza) direct to Narita Airport Terminal 1.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="time-slot highlight">14:00</span>
+          <div class="event-content">
+            <div class="event-title">Flight KE704: NRT ➔ ICN (Seoul)</div>
+            <div class="event-desc">Depart Tokyo Narita at 14:00. Arrive Incheon 16:40. Transfer to KE689 departing 18:50 back to Phnom Penh (Arrival 22:45).</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== PRO HACKS SECTION ==================== -->
+    <div id="hacks-section">
+      <h3 class="section-title">💡 Essential Japan Pro-Hacks</h3>
+      
+      <div class="hacks-grid">
+        <div class="hack-card">
+          <h4>📲 Apple Wallet Digital Suica</h4>
+          <p>Open Apple Wallet on iPhone ➔ tap <code>+</code> ➔ Transit Card ➔ Suica. Top up with your credit card. You can tap your phone through every train turnstile in Osaka, Kyoto, and Tokyo, and pay at 7-Eleven and vending machines.</p>
+        </div>
+
+        <div class="hack-card">
+          <h4>🚄 Mount Fuji Shinkansen Seat Hack</h4>
+          <p>When riding the bullet train from Kyoto to Tokyo on Dec 4, book <strong>Seats D & E</strong> on the 2-seat side. Around Shizuoka Prefecture (~45 mins before Tokyo), you will have a panoramic view of Mount Fuji out your window.</p>
+        </div>
+
+        <div class="hack-card">
+          <h4>🧳 Yamato Luggage Forwarding (Takkyubin)</h4>
+          <p>Don't haul heavy suitcases onto the bullet train. On Dec 3 at your Kyoto hotel front desk, ask them to forward your suitcases to your Ginza hotel (~$18/bag). Travel on the Shinkansen with just a light backpack!</p>
+        </div>
+
+        <div class="hack-card">
+          <h4>🚕 The $6–$8 Kyoto Short Taxi Rule</h4>
+          <p>Kyoto buses are notoriously packed with tourists. For short 5-minute hops between your hotel and Gion or Kiyomizu-dera, hail a taxi on the street or use the GO app. At $6–$8 USD for two people, it's worth every penny.</p>
+        </div>
+      </div>
+
+      <!-- Packing Checklist -->
+      <div class="checklist-card">
+        <h4 style="margin-bottom: 12px; font-weight: 800;">🎒 Quick Packing & Prep Checklist</h4>
+        <label class="check-item"><input type="checkbox" checked> Passport & Flight Tickets (KE690 / KE704)</label>
+        <label class="check-item"><input type="checkbox" checked> USJ 1-Day Pass + Express Pass 8 (Nov 29)</label>
+        <label class="check-item"><input type="checkbox" checked> Sagano Romantic Train booking (Dec 3)</label>
+        <label class="check-item"><input type="checkbox" checked> Tokyo DisneySea 1-Day Pass (Dec 7)</label>
+        <label class="check-item"><input type="checkbox"> Add Digital Suica to iPhone Apple Wallet</label>
+        <label class="check-item"><input type="checkbox"> Download "USJ" and "Tokyo Disney Resort" Apps</label>
+        <label class="check-item"><input type="checkbox"> Universal power plug adapter + high-capacity power bank</label>
+        <label class="check-item"><input type="checkbox"> Comfortable walking shoes (expect 15,000–20,000 steps/day)</label>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <p>Prepared for Pagnreach & Muypor • Safe Travels & Happy Honeymoon! 🎌✨</p>
+    </div>
+
+  </main>
+
+  <script>
+    function filterCity(city, btn) {
+      document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const dayCards = document.querySelectorAll('.day-card');
+      const hacksSection = document.getElementById('hacks-section');
+
+      if (city === 'all') {
+        dayCards.forEach(c => c.style.display = 'block');
+        hacksSection.style.display = 'block';
+        document.getElementById('current-badge').innerText = '11 Days';
+      } else if (city === 'hacks') {
+        dayCards.forEach(c => c.style.display = 'none');
+        hacksSection.style.display = 'block';
+        document.getElementById('current-badge').innerText = 'Hacks';
+      } else {
+        dayCards.forEach(c => {
+          if (c.getAttribute('data-city') === city) {
+            c.style.display = 'block';
+          } else {
+            c.style.display = 'none';
+          }
+        });
+        hacksSection.style.display = 'none';
+        document.getElementById('current-badge').innerText = city.toUpperCase();
+      }
+    }
+  </script>
+</body>
+</html>
