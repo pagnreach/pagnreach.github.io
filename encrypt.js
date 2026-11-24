@@ -226,13 +226,14 @@ async function encryptHtml(plainHtml, pin, options = {}) {
   <div class="footer-note">AES-256-GCM Zero-Knowledge Encryption</div>
 
   <script>
-    let PAGE_BUILD_TS = ${buildTs};
-    let PAYLOAD = ${JSON.stringify(payload)};
+    const LOCK_META = /*LOCK_META_START*/${JSON.stringify({ buildTs, payload, maxPin: pin.length })}/*LOCK_META_END*/;
+    let PAGE_BUILD_TS = LOCK_META.buildTs;
+    let PAYLOAD = LOCK_META.payload;
     const NORM_PATH = location.pathname.endsWith('/') ? location.pathname : (location.pathname + '/');
     const STORAGE_KEY = 'vault_session_' + NORM_PATH;
     const FRESH_PAYLOAD_KEY = 'pr_fresh_payload_' + NORM_PATH;
     let currentPin = '';
-    let MAX_PIN = ${pin.length};
+    let MAX_PIN = LOCK_META.maxPin;
     let isDecrypting = false;
     let isUnlocked = false;
 
@@ -389,13 +390,12 @@ async function encryptHtml(plainHtml, pin, options = {}) {
         .then(r => r.ok ? r.text() : '')
         .then(txt => {
           if (!txt || isUnlocked || isDecrypting) return;
-          const tsMatch = txt.match(/let\s+PAGE_BUILD_TS\s*=\s*(\d+);/);
-          const plMatch = txt.match(/let\s+PAYLOAD\s*=\s*(\{[^\n;]+\});/);
-          const mpMatch = txt.match(/let\s+MAX_PIN\s*=\s*(\d+);/);
-          if (tsMatch && plMatch && mpMatch) {
-            const remoteTs = Number(tsMatch[1]);
-            if (remoteTs > PAGE_BUILD_TS) {
-              applyFreshPayload(JSON.parse(plMatch[1]), Number(mpMatch[1]), remoteTs);
+          const parts = txt.split('/*LOCK_META_' + 'START*/');
+          if (parts.length > 1) {
+            const rawMeta = parts[1].split('/*LOCK_META_' + 'END*/')[0];
+            const remoteMeta = JSON.parse(rawMeta);
+            if (remoteMeta && remoteMeta.buildTs > PAGE_BUILD_TS) {
+              applyFreshPayload(remoteMeta.payload, remoteMeta.maxPin, remoteMeta.buildTs);
             }
           }
         })
